@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="EUC-KR" ?>
+
+
+<sqlMap namespace="QuoteContractorDaoMap">
+
+	<resultMap id="selectUnitPolicy-result-map" class="unitPolicy">
+		<result property="unitPolicyNumber" column="PLCY_NO" javaType="java.lang.String"/>
+		<result property="policyNumber" column="SALE_PLCY_NO" javaType="java.lang.String"/>
+		<result property="unitProductGroupCode" column="PKG_CLS_TYP" javaType="java.lang.String"/>
+		<result property="unitProductCode" column="PRD_CODE" javaType="java.lang.String"/>
+		<result property="unitContractStatusStr" column="AGRM_STT" javaType="java.lang.String"/>
+		<result property="specialThingCls" column="SPC_THNG_CLS" javaType="java.lang.String"/>
+		<result property="cisrCls" column="CISR_CLS" javaType="java.lang.String"/>
+		<result property="unitAgreementDate" column="AGRM_DATE" javaType="java.sql.Date"/>
+		<result property="unitContractStartDate" column="AGRM_START_DATE" javaType="java.sql.Date"/>
+		<result property="unitContractStartTime" column="AGRM_START_TIME" javaType="java.sql.Time"/>
+		<result property="unitContractEndDate" column="AGRM_END_DATE" javaType="java.sql.Date"/>
+		<result property="unitContractEndTime" column="AGRM_END_TIME" javaType="java.sql.Time"/>
+		<result property="validTerminateDate" column="VALD_TER_DATE" javaType="java.sql.Date"/>
+		<result property="insuranceDuration" column="INS_TERM" javaType="int" nullValue="0"/>
+		<result property="paymentDuration" column="PMT_TERM" javaType="int" nullValue="0"/>
+		<result property="insuredAddrCls" column="PRSTNSRD_ADR_CLS" javaType="java.lang.String"/>
+		<result property="insuredId" column="PIBOJA_ID" javaType="java.lang.String"/>
+		<result property="insuredBirthDate" column="PIBOJA_JUMIN_BIRTH" javaType="java.lang.String"/>
+		<result property="actualClerkNo" column="ACTL_CLERK" javaType="java.lang.String"/>
+		<result property="collectClerkNo" column="COLL_CLERK" javaType="java.lang.String"/>
+		<result property="colMoneyClerkNo" column="COLMNY_CLERK" javaType="java.lang.String"/>
+		<result property="actualDeptCode" column="ACTL_DEPT" javaType="java.lang.String"/>
+		<result property="collectDeptCode" column="COLL_DEPT" javaType="java.lang.String"/>
+		<result property="colMoneyDeptCode" column="COLMNY_DEPT" javaType="java.lang.String"/>
+		<result property="lastEndorsementBaseDate" column="LAST_ENDO_STND_DT" javaType="java.sql.Date"/>
+		<result property="endorsementProcessYn" column="ENDO_PROC_CLS" javaType="java.lang.String"/>
+		<result property="unitPremiumAmount" column="AG_INS_PREM" javaType="java.math.BigDecimal" nullValue="0"/>
+		<result property="paymentAccount" column="PMT_ACNT" javaType="int" nullValue="0"/>
+		<result property="paymentMethod" column="PMT_METHOD" javaType="java.lang.String"/>
+		<result property="agreementType" column="AGRM_TYP" javaType="java.lang.String"/>
+		<result property="individualOrganCls" column="IND_ORG_CLS" javaType="java.lang.String"/>
+		<result property="agreementMgmtCls" column="AGMT_MANAGE_CLS" javaType="java.lang.String"/>
+		<result property="agreementCls" column="AGRM_CLS" javaType="java.lang.String"/>
+		<result property="agreementFormCls" column="AGRM_FRM_CLS" javaType="java.lang.String"/>
+		<result property="mstrCls" column="GRP_PLCY_CLS" javaType="java.lang.String"/>
+		<result property="mstrNo" column="GRP_PLCY_NO" javaType="java.lang.String"/>
+		<result property="mstrSerNo" column="GRP_PLCY_SEQ" javaType="int" nullValue="0"/>
+		<result property="incomeDeductionYn" column="INC_DDCT_YN" javaType="java.lang.String"/>
+		<result property="accidentPresence" column="ACCDNT_PSNC" javaType="java.lang.String"/>
+		<result property="retroactionAgreementCls" column="RTATV_AGRM_CLS" javaType="java.lang.String"/>
+		<result property="reinsuranceCls" column="REINS_CLS" javaType="java.lang.String"/>
+		<result property="coinsuranceChangeYn" column="CO_INS_CHNG_YN" javaType="java.lang.String"/>
+		<result property="occurrenceChannelCls" column="OCC_CHNL_CLS" javaType="java.lang.String"/>
+		<result property="inspectionYn" column="IVST_DGR" javaType="java.lang.String"/>
+		<result property="loanYn" column="LOAN_YN" javaType="java.lang.String"/>
+		<result property="pledgeSettingYn" column="PLDG_SET_YN" javaType="java.lang.String"/>
+		<result property="inputDate" column="INPUT_DATE" javaType="java.sql.Date"/>
+		<result property="endorsementYn" column="ENDO_YN" javaType="java.lang.String"/>
+		<result property="postSubstanceEntryYn" column="POST_SBST_ENTY_YN" javaType="java.lang.String"/>
+		<result property="colMoneyMethod" column="COLMNY_METHOD" javaType="java.lang.String"/>
+		<result property="mainPolicyYn" column="COLMNY_METHOD" javaType="java.lang.String"/>	
+   </resultMap>
+	
+	<!-- 단위계약(PPAG01TB) 조회  -->	
+	<select id="PP.selectUnitPolicy" parameterClass="java.lang.String" resultMap="selectUnitPolicy-result-map">
+		SELECT	PLCY_NO
+				,SALE_PLCY_NO
+				,PKG_CLS_TYP
+				,PRD_CODE
+				,AGRM_STT
+				,SPC_THNG_CLS
+				,CISR_CLS
+				,AGRM_DATE
+				,AGRM_START_DATE
+				,AGRM_START_TIME
+				,AGRM_END_DATE
+				,AGRM_END_TIME
+				,VALD_TER_DATE
+				,INS_TERM
+				,PMT_TERM
+				,PRSTNSRD_ADR_CLS
+				,PIBOJA_ID
+				,PIBOJA_JUMIN_BIRTH
+				,ACTL_CLERK
+				,COLL_CLERK
+				,COLMNY_CLERK
+				,ACTL_DEPT
+				,COLL_DEPT
+				,COLMNY_DEPT
+				,LAST_ENDO_STND_DT
+				,ENDO_PROC_CLS
+				,AG_INS_PREM
+				,PMT_ACNT
+				,PMT_METHOD
+				,AGRM_TYP
+				,IND_ORG_CLS
+				,AGMT_MANAGE_CLS
+				,AGRM_CLS
+				,AGRM_FRM_CLS
+				,GRP_PLCY_CLS
+				,GRP_PLCY_NO
+				,GRP_PLCY_SEQ
+				,INC_DDCT_YN
+				,ACCDNT_PSNC
+				,RTATV_AGRM_CLS
+				,REINS_CLS
+				,CO_INS_CHNG_YN
+				,OCC_CHNL_CLS
+				,IVST_DGR
+				,LOAN_YN
+				,PLDG_SET_YN
+				,INPUT_DATE
+				,ENDO_YN
+				,POST_SBST_ENTY_YN
+				,COLMNY_METHOD
+				,MAIN_PLCY_YN
+		  FROM 	PPAG01TB 
+		WHERE 	SALE_PLCY_NO = #salePolicyNumber#
+	 </select> 	
+</sqlMap>

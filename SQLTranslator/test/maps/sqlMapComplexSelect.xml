@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="EUC-KR" ?>
+
+<!DOCTYPE sqlMap
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="QuoteContractorDaoMap">
+	<select id="PP.selectContractor" parameterClass="java.lang.String" resultMap="selectquoteContractor-result-map">
+		SELECT  
+			  SEQ_NUM,
+			  VERSION,
+			  CONTOR_CLS,
+			  CONTOR_CD_CLS,
+			  CONTOR_ID,
+			  CONTRACTOR_REL,
+			  TAX_SETL_RATE,
+			  SETL_START_YEAR,
+			  SETL_END_YEAR,
+			  ETSTATUS,
+		      EVENT_NO,
+			  INPUT_DATE,
+		      OUTPUT_NAME
+		FROM  PQIT08TB
+		WHERE FK_ENTY_DSGN_NO = #planNumber#
+		  AND CONTOR_CLS = '05'
+	</select>
+	
+   <resultMap id="selectAnyCarContractInfo-result-map"  class="CHAnyCarContract">
+        <result property="plcyNo" column="PLCY_NO" javaType="java.lang.String" />
+        <result property="contractType" column="AGRM_TYP" javaType="java.lang.String" />
+        <result property="agreementStatus" column="AGRM_STT" javaType="java.lang.String" />
+        <result property="pibojaId" column="PIBOJA_ID" javaType="java.lang.String" />
+        <result property="productCode" column="PRD_CODE" javaType="java.lang.String" />
+        <result property="paymentCount" column="PMT_ACNT" javaType="java.lang.String" />
+        <result property="subscriptionDate" column="AGRM_DATE" javaType="java.lang.String" />
+        <result property="productLongYN" column="PRODUCT_LONG_YN" javaType="java.lang.String" />
+        <result property="productGeneralYN" column="PRODUCT_GENERAL_YN" javaType="java.lang.String" />
+        <result property="productName" column="PRD_NAME" javaType="java.lang.String" />
+        <result property="businessDriveGubunValue" column="BUSINESS_DRIVE_GUBUN_VALUE" javaType="java.lang.String" />
+        <result property="receiptDate" column="RECEIPT_DATE" javaType="java.lang.String" />
+        <result property="insuredJuminNo" column="PIBOJA_ID" javaType="java.lang.String" />
+   	    <result property="grpPlcyCls" column="GRP_PLCY_CLS" javaType="java.lang.String" />
+	    <result property="grpPlcyNo" column="GRP_PLCY_NO" javaType="java.lang.String" />
+    </resultMap>
+    <select id="PP.getValidContractListByCarNoForAnyCarService" parameterClass="java.util.HashMap" resultMap="selectAnyCarContractInfo-result-map">
+        <![CDATA[
+        SELECT * FROM (
+			SELECT
+	        A.PLCY_NO
+	        ,A.AGRM_TYP
+	        ,CASE WHEN A.PKG_CLS_TYP IN ('2','3') THEN
+	        END
+	        AGRM_STT
+	        ,A.PIBOJA_ID
+	        ,A.PRD_CODE
+	        ,A.PMT_ACNT
+	        ,A.AGRM_DATE
+	        ,PKG_CLS_TYP      
+	        ,CASE A.PRD_GUBUN WHEN '2' THEN 'Y' ELSE 'N' END PRODUCT_LONG_YN
+	        ,CASE A.PRD_GUBUN WHEN '3' THEN 'Y' ELSE 'N' END PRODUCT_GENERAL_YN 
+	        ,(SELECT PRD_NAME FROM SSPD01TB 
+	        WHERE PRD_CODE = A.PRD_CODE) PRD_NAME
+	        ,CASE PKG_CLS_TYP WHEN '3' THEN
+	        (SELECT MIN(PMT_DATE) FROM PPRT01TB 
+			  WHERE FK_PLCY_NO = A.PLCY_NO 
+			    AND PREM_CLS = '1' 
+			    AND APPL_START_DATE <= #standardDate#
+			    AND APPL_END_DATE > #standardDate#
+			    AND ETSTATUS = 'A') 
+	        ELSE 
+	        (select MAX(PMT_DATE) FROM PPRT01TB WHERE FK_PLCY_NO = A.PLCY_NO AND PREM_CLS = '1' AND APPL_END_DATE = TO_DATE('9999-12-31','YYYY-MM-DD') AND ETSTATUS = 'A') 
+	        END
+	        RECEIPT_DATE
+			,A.GRP_PLCY_CLS 
+			,A.GRP_PLCY_NO  
+	        , MAX(BUSINESS_DRIVE_GUBUN_VALUE) BUSINESS_DRIVE_GUBUN_VALUE        
+	        FROM (
+		        SELECT
+		        UNIT.PLCY_NO
+		        ,UNIT.CONTOR_ID
+		        ,UNIT.CONTOR_NAME
+		        ,UNIT.AGRM_START_DATE
+		        ,UNIT.AGRM_END_DATE
+		        ,UNIT.COLMNY_CLERK
+		        ,UNIT.PKG_CLS_TYP
+		        ,UNIT.AGRM_STT
+		        ,UNIT.PIBOJA_ID
+		        ,UNIT.PRD_CODE
+		        ,UNIT.AGRM_TYP
+		        ,UNIT.PMT_ACNT
+		        ,UNIT.AGRM_DATE        
+		        ,CASE UNIT.PKG_CLS_TYP WHEN '3' THEN '1'
+		        WHEN '2' THEN '2'
+		        ELSE '3'
+		        END PRD_GUBUN
+		        , CASE OBJT_ITEM_CD WHEN '01813' THEN LTRIM(RTRIM(ITEM_TEXT)) END KOREA_CAR_YN_VALUE        
+		        , CASE INFO.INFO_CD WHEN '55488' THEN INFO_VAL_TEXT END RECEIPT_DATE
+		        , CASE INFO.INFO_CD WHEN '50031' THEN INFO_VAL_TEXT END BUSINESS_DRIVE_GUBUN_VALUE
+		        , CASE INFO.INFO_CD WHEN '01456' THEN INFO_VAL_TEXT END INFO_CAR_NO	
+				,UNIT.GRP_PLCY_CLS 
+				,UNIT.GRP_PLCY_NO  
+		        from PPAG01TB UNIT
+		        LEFT OUTER JOIN PPIS05TB ITEM
+		        ON ITEM.FK_PLCY_NO = UNIT.PLCY_NO
+		        AND ITEM.FK_OBJECT_TYPE = 'M0002' 
+		        AND ITEM.ETSTATUS = 'A' 
+		        AND ITEM.OBJT_ITEM_CD IN ('01456','00408','00689','00407','00040','01775','01813')
+		        AND ITEM_TEXT IS NOT NULL
+		        LEFT OUTER JOIN PPIT03TB INFO
+		        ON INFO.FK_PLCY_NO = UNIT.PLCY_NO
+		        AND INFO.APPL_START_DATE <= #standardDate#
+		        AND INFO.APPL_END_DATE > #standardDate#
+		        AND INFO.ETSTATUS = 'A'
+		        AND INFO.INFO_CD IN ('50031','55488','01456')
+	        ) A
+	        GROUP BY A.PLCY_NO
+		        ,A.CONTOR_ID
+		        ,A.CONTOR_NAME        
+		        ,A.AGRM_START_DATE
+		        ,A.AGRM_END_DATE
+		        ,A.COLMNY_CLERK
+		        ,A.PKG_CLS_TYP
+		        ,A.AGRM_STT
+		        ,A.PIBOJA_ID
+		        ,A.PRD_CODE
+		        ,A.PRD_GUBUN
+		        ,A.AGRM_TYP
+		        ,A.AGRM_DATE
+		        ,A.PMT_ACNT
+		        ,A.RECEIPT_DATE      
+				,A.GRP_PLCY_CLS 
+				,A.GRP_PLCY_NO  
+	        ORDER BY A.PRD_GUBUN, A.PLCY_NO   
+        ) WHERE rownum/*DB2(fetch.first)*/ <= 100  
+		]]> 
+    </select>
+</sqlMap>

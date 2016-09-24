@@ -1,0 +1,92 @@
+<sql file="sqlMapTest.xml">
+
+<query id="PP.selectContractor" resultMap="selectquoteContractor-result-map">
+<!-- 
+    1. Column infos for SqlMap :  
+    2. Translated Columns : [ag07.enty_dsgn_no => ag07.SALE_ENTR_DSGN_NO:판매가입설계번호], [ag07.dsgn_seq_num => ag07.UNIT_DSGN_SEQN:단위설계순번], [ag04.contor_name => ag04.CTRA_NM:계약자명], [ag01.pkg_cls_typ => ag01.PROD_CLF_SHP_CD:상품분류형태코드], [ag01.coll_clerk => ag01.CLPS_CRNO:모집자사번], [ag01.piboja_id => ag01.INSA_ID:피보험자ID], [ag04.contor_id => ag04.CTRA_ID:계약자ID], [ag01.agrm_date => ag01.SUBS_DT:청약일자], [ag07.event_no => ag07.ENDO_NO:배서번호], [ag01.prd_code => ag01.PROD_CD:상품코드], [ag07.event_no => ag07.ENDO_NO:배서번호], [ag01.plcy_no => ag01.PLNO:증권번호], [ag07.fk_sale_plcy_no => ag07.null:null], [ag04.sale_plcy_no => ag04.null:null], [ag07.event_no => ag07.null:null], [ag01.plcy_no => ag01.null:null], [objt_nm => OBJT_NM:목적물명], [objt_unq_id => OBJT_UNQ_ID:목적물고유ID], [fk_plcy_no => PLNO:증권번호], [ag01.piboja_id => ag01.PLNO:증권번호], [ag01.plcy_no => ag01.PLNO:증권번호],  
+    3. Failed Columns : ag07.fk_sale_plcy_no, ag04.sale_plcy_no, ag07.event_no, ag01.plcy_no,  
+    4. Translated Tables : [ppag01tb => TAGBA001], [ppag04tb => TAGSA004], [ppag07tb => TAGSA007], [ppis01tb => TAGOB001],  -->
+
+TO-BE : 
+    SELECT 
+               ag04.CTRA_ID           contractorId,
+               ag04.CTRA_NM         contractorName,
+               ag07.SALE_ENTR_DSGN_NO        planNumber,
+               ag07.UNIT_DSGN_SEQN        unitPlanNumber,
+               CASE
+                    WHEN ag07.ENDO_NO = '0000' THEN '1'
+                    ELSE '2'
+               END entyDsgnCls,
+               ag01.PROD_CLF_SHP_CD         pkgClsTyp,
+               ag01.PROD_CD            prodCode,
+               ag01.SUBS_DT           agrmDate,
+               ag01.INSA_ID           humanInsuredId,
+               (SELECT OBJT_NM
+                     FROM TAGOB001
+                    WHERE PLNO = ag01.PLNO
+                      AND OBJT_UNQ_ID = ag01.PLNO
+               )         humanInsuredName,
+               ag01.CLPS_CRNO          collMoneyClerk,
+               ag01.PLNO             plcyNo,
+               ag07.ENDO_NO            eventNo
+          FROM TAGBA001 ag01, TAGSA004 ag04, TAGSA007 ag07
+         WHERE ag01.plcy_no = #plcyNo#
+           AND ag01.plcy_no = ag04.sale_plcy_no
+           AND ag01.plcy_no = ag07.fk_sale_plcy_no
+           AND ag07.event_no = #eventNo#
+TO-BE TEST : 
+    SELECT 
+               ag04.CTRA_ID           contractorId,
+               ag04.CTRA_NM         contractorName,
+               ag07.SALE_ENTR_DSGN_NO        planNumber,
+               ag07.UNIT_DSGN_SEQN        unitPlanNumber,
+               CASE
+                    WHEN ag07.ENDO_NO = '0000' THEN '1'
+                    ELSE '2'
+               END entyDsgnCls,
+               ag01.PROD_CLF_SHP_CD         pkgClsTyp,
+               ag01.PROD_CD            prodCode,
+               ag01.SUBS_DT           agrmDate,
+               ag01.INSA_ID           humanInsuredId,
+               (SELECT OBJT_NM
+                     FROM TAGOB001
+                    WHERE PLNO = ag01.PLNO
+                      AND OBJT_UNQ_ID = ag01.PLNO
+               )         humanInsuredName,
+               ag01.CLPS_CRNO          collMoneyClerk,
+               ag01.PLNO             plcyNo,
+               ag07.ENDO_NO            eventNo
+          FROM TAGBA001 ag01, TAGSA004 ag04, TAGSA007 ag07
+         WHERE ag01.plcy_no = 'a'
+           AND ag01.plcy_no = ag04.sale_plcy_no
+           AND ag01.plcy_no = ag07.fk_sale_plcy_no
+           AND ag07.event_no = 'a'
+AS-IS : 
+    SELECT 
+               ag04.contor_id           contractorId,
+               ag04.contor_name         contractorName,
+               ag07.enty_dsgn_no        planNumber,
+               ag07.dsgn_seq_num        unitPlanNumber,
+               CASE
+                    WHEN ag07.event_no = '0000' THEN '1'
+                    ELSE '2'
+               END entyDsgnCls,
+               ag01.pkg_cls_typ         pkgClsTyp,
+               ag01.prd_code            prodCode,
+               ag01.agrm_date           agrmDate,
+               ag01.piboja_id           humanInsuredId,
+               (SELECT objt_nm
+                     FROM ppis01tb
+                    WHERE fk_plcy_no = ag01.plcy_no
+                      AND objt_unq_id = ag01.piboja_id
+               )         humanInsuredName,
+               ag01.coll_clerk          collMoneyClerk,
+               ag01.plcy_no             plcyNo,
+               ag07.event_no            eventNo
+          FROM ppag01tb ag01, ppag04tb ag04, ppag07tb ag07
+         WHERE ag01.plcy_no = #plcyNo#
+           AND ag01.plcy_no = ag04.sale_plcy_no
+           AND ag01.plcy_no = ag07.fk_sale_plcy_no
+           AND ag07.event_no = #eventNo#
+</query>
+</sql>
