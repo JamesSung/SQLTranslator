@@ -1,9 +1,10 @@
 # SQLTranslator
 SQL Translator (JAVA Project)
 
-This tool can change comumn names and table names that are contained in SQL based on mapping rule.
+This tool can change column names and table names those are contained in SQLs based on mapping rule.
 Mapping Rules must be defined and saved as a file.
-For example, from SQL A to B
+For example, SQL A below will be changed to SQL B.
+
  A) select e.emp_id, e.emp_name, d.dept_id, d.dept_name, e.emp_date
       from emploee e, dept d
      where e.dept_id = d.dept_id
@@ -24,10 +25,10 @@ For example, from SQL A to B
  dept,dept_id,dept01tb,dept_no
  dept,emp_name,dept01tb,dept_nm
  
- this tool is also desined to handle inline views and subquerys.
+ This tool is also designed to handle inline views and subquerys.
  
  In the middle of developping process or for the ready to use solutions,
- you can change your naming rule of entities with this tool.
+ you could change the naming rule of entities with this tool.
  I hope that it would be never happen to you.
 
  
