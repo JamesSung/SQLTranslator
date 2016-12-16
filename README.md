@@ -29,7 +29,7 @@ For example, SQL A below will be changed to SQL B.<br/>
  
  In the middle of developping process or for the ready to use solutions,<br/>
  you could change the naming rule of entities with this tool.<br/>
- I hope that it would be never happen to you.<br/>
+
 
  
  
