@@ -10,15 +10,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sung.sqltranslator.translator.vo.QueryText;
 
-
-
-/**
- * 
- * Desc :
- * @Author : seokhwan.sung
- * @Date : 2011. 10. 18.
- * @Version :
- */
 public class QueryUtil {
 	private static Log log = LogFactory.getLog(QueryUtil.class);
 
