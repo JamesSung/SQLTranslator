@@ -15,13 +15,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-/**
- * 
- * Desc : subtract table name form sql
- * @Author : seokhwan.sung
- * @Date : 2011. 10. 14.
- * @Version :
- */
 public class ColumnNameSqlMapSaxHandler extends DefaultHandler{
 	
 	private static Log log = LogFactory.getLog(ColumnNameSqlMapSaxHandler.class);
