@@ -12,15 +12,6 @@ import org.apache.commons.logging.LogFactory;
 import org.sung.sqltranslator.translator.vo.Query;
 import org.sung.sqltranslator.translator.vo.QueryText;
 
-
-/**
- * 
- * Desc : extracting subsuery <br/>
- * supposition : every subquery was used with brace '()'
- * @Author : seokhwan.sung
- * @Date : 2011. 10. 13.
- * @Version :
- */
 public class QueryDivider {
 	private static Log log = LogFactory.getLog(QueryDivider.class);
 
